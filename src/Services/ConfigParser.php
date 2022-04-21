@@ -36,7 +36,14 @@ class ConfigParser
         foreach ($this->fileData as $fileDatum){
             $this->mergeFileContent($fileDatum['content'], $this->mergedContent);
         }
-        dd($this->mergedContent);
+    }
+
+    /**
+     * @return array
+     */
+    public function getMergedContent(): array
+    {
+        return $this->mergedContent;
     }
 
     /**
