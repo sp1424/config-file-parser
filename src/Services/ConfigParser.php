@@ -3,8 +3,14 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use Symfony\Component\Yaml\Yaml;
+
 class ConfigParser
 {
+    private const JSON_EXT = 'json';
+
+    private const YAML_EXT = 'yaml';
+
     /**
      * @var array
      */
@@ -22,7 +28,21 @@ class ConfigParser
     public function loadFiles(string ...$files): void
     {
         foreach ($files as $file){
-            $content = json_decode(file_get_contents($file), true);
+            $extension = pathinfo($file)['extension'];
+            $fileContents = file_get_contents($file);
+
+            $content = null;
+
+            if ($extension === self::JSON_EXT){
+                $content = json_decode($fileContents, true);
+            }
+            if ($extension === self::YAML_EXT){
+                $content = Yaml::parse($fileContents);
+            }
+
+            if ($content === null){
+                continue;
+            }
 
             $this->fileData[] = [
                 'name' => $file,
