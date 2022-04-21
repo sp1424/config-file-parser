@@ -14,6 +14,9 @@ class ConfigParserCommand extends Command
 
     protected static $defaultDescription = 'Environment config parser';
 
+    /**
+     * @var ConfigParser
+     */
     private ConfigParser $configParser;
 
     /**
