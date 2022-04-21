@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Tests;
 
@@ -24,5 +25,33 @@ class ConfigParserTest extends TestCase
         $configParser->mergeData();
 
         $this->assertTrue(json_encode($expectedOutput) === json_encode($configParser->getMergedContent()));
+    }
+
+    public function testTraversalCorrect(): void
+    {
+        $configParser = new ConfigParser();
+        $configParser->loadFiles(
+            __DIR__.'/testFixtures/testFile1.config.json',
+            __DIR__.'/testFixtures/testFile2.config.json'
+        );
+        $configParser->mergeData();
+
+        $expectedOutput = '127.0.0.1';
+
+        $this->assertTrue($expectedOutput === $configParser->traverseContent('database.host'));
+    }
+
+    public function testTraversalIncorrect(): void
+    {
+        $configParser = new ConfigParser();
+        $configParser->loadFiles(
+            __DIR__.'/testFixtures/testFile1.config.json',
+            __DIR__.'/testFixtures/testFile2.config.json'
+        );
+        $configParser->mergeData();
+
+        $expectedOutput = '127.0.0.1';
+
+        $this->assertFalse($expectedOutput === $configParser->traverseContent('database.HOST'));
     }
 }

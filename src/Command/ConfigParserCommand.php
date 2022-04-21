@@ -14,6 +14,9 @@ class ConfigParserCommand extends Command
 
     protected static $defaultDescription = 'Environment config parser';
 
+    /**
+     * @var ConfigParser
+     */
     private ConfigParser $configParser;
 
     /**
@@ -34,6 +37,10 @@ class ConfigParserCommand extends Command
         $this->configParser->loadFiles('./fixtures/config.json', './fixtures/config.local.json');
 
         $this->configParser->mergeData();
+
+        dump($this->configParser->getMergedContent());
+
+        dd($this->configParser->traverseContent('database.port'));
 
         return Command::SUCCESS;
     }

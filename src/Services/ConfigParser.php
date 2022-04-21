@@ -47,6 +47,47 @@ class ConfigParser
     }
 
     /**
+     * Due to specifying return type of string in this function
+     * is easier to convert other possible outcomes to string for consistency
+     * as spec requires to return data but does not say in what format
+     *
+     * @param string $destination
+     * @return string|null
+     */
+    public function traverseContent(string $destination): ?string
+    {
+        if (count($this->mergedContent) < 1){
+            return null;
+        }
+
+        $traversalIndices = explode('.', $destination);
+        $traversedContent = null;
+
+        foreach ($traversalIndices as $traversalIndex){
+            if (!isset($this->mergedContent[$traversalIndex]) && $traversedContent === null){
+                return null;
+            }
+            if ($traversedContent === null){
+                $traversedContent = $this->mergedContent[$traversalIndex];
+                continue;
+            }
+            if (!isset($traversedContent[$traversalIndex])){
+                return null;
+            }
+            $traversedContent = $traversedContent[$traversalIndex];
+        }
+
+        if (is_array($traversedContent)){
+            $traversedContent = json_encode($traversedContent);
+        }
+        if (is_numeric($traversedContent)){
+            $traversedContent = (string) $traversedContent;
+        }
+
+        return $traversedContent;
+    }
+
+    /**
      * @param array $fileContent
      * @param array $mergedContent
      * @return void
