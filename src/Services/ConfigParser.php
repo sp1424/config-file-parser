@@ -52,7 +52,7 @@ class ConfigParser
      * as spec requires to return data but does not say in what format
      *
      * @param string $destination
-     * @return object|null
+     * @return string|null
      */
     public function traverseContent(string $destination): ?string
     {
