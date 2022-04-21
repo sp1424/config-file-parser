@@ -73,4 +73,23 @@ class ConfigParserTest extends TestCase
 
         $this->assertTrue(json_encode($expectedOutput) === json_encode($configParser->getMergedContent()));
     }
+
+    public function testYamlAndJson()
+    {
+        $expectedOutput = [
+            'environment' => 'prod',
+            'database' => [
+                'host' => 'mysql'
+            ]
+        ];
+
+        $configParser = new ConfigParser();
+        $configParser->loadFiles(
+            __DIR__.'/testFixtures/testFile2.config.yaml',
+            __DIR__.'/testFixtures/testFile1.config.json'
+        );
+        $configParser->mergeData();
+
+        $this->assertTrue(json_encode($expectedOutput) === json_encode($configParser->getMergedContent()));
+    }
 }
