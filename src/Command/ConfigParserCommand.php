@@ -38,6 +38,10 @@ class ConfigParserCommand extends Command
 
         $this->configParser->mergeData();
 
+        dump($this->configParser->getMergedContent());
+
+        dd($this->configParser->traverseContent('database.port'));
+
         return Command::SUCCESS;
     }
 }
