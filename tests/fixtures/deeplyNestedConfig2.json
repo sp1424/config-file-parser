@@ -1,0 +1,15 @@
+{
+  "environment": "dev",
+  "database": {
+    "host": "mysql",
+    "data": {
+      "deeply": "test",
+      "json": {
+        "config": "test",
+        "test": {
+          "final": "final"
+        }
+      }
+    }
+  }
+}

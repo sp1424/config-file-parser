@@ -31,11 +31,11 @@ class ConfigParser
     public function loadFiles(string ...$files): void
     {
         foreach ($files as $file){
-            $extension = pathinfo($file)['extension'];
-
             if (!file_exists($file)){
                 throw new FileNotFoundException('File not found: ' . $file);
             }
+
+            $extension = pathinfo($file)['extension'];
 
             $fileContents = file_get_contents($file);
 
@@ -45,11 +45,16 @@ class ConfigParser
                 $content = json_decode($fileContents, true);
             }
             if ($extension === self::YAML_EXT){
-                $content = Yaml::parse($fileContents);
+                try {
+                    $content = Yaml::parse($fileContents);
+                }catch (\Exception $e){
+                    $content = null;
+                }
             }
 
             if ($content === null){
-                throw new ParseException('File content empty or file content is invalid');
+                echo 'File content empty or file content is invalid therefore skipping' . PHP_EOL;
+                continue;
             }
 
             $this->fileData[] = [

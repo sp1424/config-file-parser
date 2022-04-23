@@ -21,8 +21,8 @@ class ConfigParserTest extends TestCase
 
         $configParser = new ConfigParser();
         $configParser->loadFiles(
-            __DIR__.'/testFixtures/testFile1.config.json',
-            __DIR__.'/testFixtures/testFile2.config.json'
+            __DIR__ . '/fixtures/testFile1.config.json',
+            __DIR__ . '/fixtures/testFile2.config.json'
         );
         $configParser->mergeData();
 
@@ -33,8 +33,8 @@ class ConfigParserTest extends TestCase
     {
         $configParser = new ConfigParser();
         $configParser->loadFiles(
-            __DIR__.'/testFixtures/testFile1.config.json',
-            __DIR__.'/testFixtures/testFile2.config.json'
+            __DIR__ . '/fixtures/testFile1.config.json',
+            __DIR__ . '/fixtures/testFile2.config.json'
         );
         $configParser->mergeData();
 
@@ -47,8 +47,8 @@ class ConfigParserTest extends TestCase
     {
         $configParser = new ConfigParser();
         $configParser->loadFiles(
-            __DIR__.'/testFixtures/testFile1.config.json',
-            __DIR__.'/testFixtures/testFile2.config.json'
+            __DIR__ . '/fixtures/config.local.json',
+            __DIR__ . '/fixtures/config.json'
         );
         $configParser->mergeData();
 
@@ -57,26 +57,26 @@ class ConfigParserTest extends TestCase
         $this->assertFalse($expectedOutput === $configParser->traverseContent('database.HOST'));
     }
 
-    public function testYamlFiles()
+    public function testYamlFiles(): void
     {
         $expectedOutput = [
             'environment' => 'development',
             'database' => [
-                'host' => '127.0.0.1'
+                'host' => 'yaml host'
             ]
         ];
 
         $configParser = new ConfigParser();
         $configParser->loadFiles(
-            __DIR__.'/testFixtures/testFile1.config.yaml',
-            __DIR__.'/testFixtures/testFile2.config.yaml'
+            __DIR__.'/fixtures/testFile1.config.yaml',
+            __DIR__.'/fixtures/testFile2.config.yaml'
         );
         $configParser->mergeData();
 
         $this->assertTrue(json_encode($expectedOutput) === json_encode($configParser->getMergedContent()));
     }
 
-    public function testYamlAndJson()
+    public function testYamlAndJson(): void
     {
         $expectedOutput = [
             'environment' => 'prod',
@@ -87,48 +87,100 @@ class ConfigParserTest extends TestCase
 
         $configParser = new ConfigParser();
         $configParser->loadFiles(
-            __DIR__.'/testFixtures/testFile2.config.yaml',
-            __DIR__.'/testFixtures/testFile1.config.json'
+            __DIR__.'/fixtures/testFile2.config.yaml',
+            __DIR__.'/fixtures/testFile1.config.json'
         );
         $configParser->mergeData();
 
         $this->assertTrue(json_encode($expectedOutput) === json_encode($configParser->getMergedContent()));
     }
 
-    /**
-     * @throws ParseException
-     */
-    public function testInvalidYaml()
+
+    public function testInvalidYaml(): void
     {
-        $this->expectException(ParseException::class);
         $configParser = new ConfigParser();
         $configParser->loadFiles(
-            __DIR__.'/testFixtures/testFileInvalid.yaml'
+            __DIR__ . '/fixtures/testFileInvalid.yaml'
         );
+
+        $this->assertEmpty($configParser->getMergedContent());
     }
 
-    /**
-     * @throws ParseException
-     */
-    public function testInvalidJson()
+
+    public function testInvalidJson(): void
     {
-        $this->expectException(ParseException::class);
         $configParser = new ConfigParser();
         $configParser->loadFiles(
-            __DIR__.'/testFixtures/testFileInvalid.json'
+            __DIR__ . '/fixtures/testFileInvalid.json'
         );
+
+        $this->assertEmpty($configParser->getMergedContent());
     }
 
     /**
      * @throws FileNotFoundException
      */
-    public function testFileNotFound()
+    public function testFileNotFound(): void
     {
         $this->expectException(FileNotFoundException::class);
         $configParser = new ConfigParser();
         $configParser->loadFiles(
-            __DIR__.'/testFixtures/testFileInvalid123.json'
+            __DIR__ . '/fixtures/testFileInvalid123.json'
         );
     }
 
+    public function testDeepNestedFilesString(): void
+    {
+        $expectedOutput = 'test';
+        $configParser = new ConfigParser();
+        $configParser->loadFiles(
+            __DIR__ . '/fixtures/deeplyNestedConfig1.json',
+            __DIR__ . '/fixtures/deeplyNestedConfig2.json'
+        );
+        $configParser->mergeData();
+        $traversedData = $configParser->traverseContent('database.data.json.config');
+        $this->assertTrue($expectedOutput ===  $traversedData);
+    }
+
+    /**
+     * @throws FileNotFoundException
+     */
+    public function testDeepNestedFilesArray(): void
+    {
+        $expectedOutput = [
+            'deeply' => 'test',
+            'json' => [
+                'config' => 'test',
+                'test' => [
+                    'final' => 'final'
+                ]
+            ]
+        ];
+
+        $configParser = new ConfigParser();
+        $configParser->loadFiles(
+            __DIR__ . '/fixtures/deeplyNestedConfig1.json',
+            __DIR__ . '/fixtures/deeplyNestedConfig2.json'
+        );
+        $configParser->mergeData();
+        $traversedData = $configParser->traverseContent('database.data');
+        $this->assertTrue(json_encode($expectedOutput) ===  $traversedData);
+    }
+
+    /**
+     * @throws FileNotFoundException
+     */
+    public function testMultipleFiles(): void
+    {
+        $expectedOutput = 'yaml host';
+        $configParser = new ConfigParser();
+        $configParser->loadFiles(
+            __DIR__ . '/fixtures/deeplyNestedConfig1.json',
+            __DIR__ . '/fixtures/deeplyNestedConfig2.json',
+            __DIR__ . '/fixtures/testFile2.config.yaml',
+        );
+        $configParser->mergeData();
+        $traversedData = $configParser->traverseContent('database.host');
+        $this->assertTrue($expectedOutput ===  $traversedData);
+    }
 }
