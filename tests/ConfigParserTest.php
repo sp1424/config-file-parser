@@ -57,7 +57,7 @@ class ConfigParserTest extends TestCase
         $this->assertFalse($expectedOutput === $configParser->traverseContent('database.HOST'));
     }
 
-    public function testYamlFiles()
+    public function testYamlFiles(): void
     {
         $expectedOutput = [
             'environment' => 'development',
@@ -76,7 +76,7 @@ class ConfigParserTest extends TestCase
         $this->assertTrue(json_encode($expectedOutput) === json_encode($configParser->getMergedContent()));
     }
 
-    public function testYamlAndJson()
+    public function testYamlAndJson(): void
     {
         $expectedOutput = [
             'environment' => 'prod',
@@ -98,7 +98,7 @@ class ConfigParserTest extends TestCase
     /**
      * @throws ParseException
      */
-    public function testInvalidYaml()
+    public function testInvalidYaml(): void
     {
         $this->expectException(ParseException::class);
         $configParser = new ConfigParser();
@@ -110,7 +110,7 @@ class ConfigParserTest extends TestCase
     /**
      * @throws ParseException
      */
-    public function testInvalidJson()
+    public function testInvalidJson(): void
     {
         $this->expectException(ParseException::class);
         $configParser = new ConfigParser();
@@ -122,7 +122,7 @@ class ConfigParserTest extends TestCase
     /**
      * @throws FileNotFoundException
      */
-    public function testFileNotFound()
+    public function testFileNotFound(): void
     {
         $this->expectException(FileNotFoundException::class);
         $configParser = new ConfigParser();
@@ -134,7 +134,7 @@ class ConfigParserTest extends TestCase
     /**
      * @throws FileNotFoundException
      */
-    public function testDeepNestedFilesString()
+    public function testDeepNestedFilesString(): void
     {
         $expectedOutput = 'test';
         $configParser = new ConfigParser();
@@ -150,7 +150,7 @@ class ConfigParserTest extends TestCase
     /**
      * @throws FileNotFoundException
      */
-    public function testDeepNestedFilesArray()
+    public function testDeepNestedFilesArray(): void
     {
         $expectedOutput = [
             'deeply' => 'test',
@@ -175,7 +175,7 @@ class ConfigParserTest extends TestCase
     /**
      * @throws FileNotFoundException
      */
-    public function testMultipleFiles()
+    public function testMultipleFiles(): void
     {
         $expectedOutput = 'yaml host';
         $configParser = new ConfigParser();

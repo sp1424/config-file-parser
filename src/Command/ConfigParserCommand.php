@@ -13,8 +13,14 @@ use Symfony\Component\Yaml\Exception\ParseException;
 
 class ConfigParserCommand extends Command
 {
+    /**
+     * @var string
+     */
     protected static $defaultName = 'app:parser-files';
 
+    /**
+     * @var string
+     */
     protected static $defaultDescription = 'Environment config parser';
 
     /**
