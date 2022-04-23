@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
+use Symfony\Component\Yaml\Exception\ParseException;
 use Symfony\Component\Yaml\Yaml;
 
 class ConfigParser
@@ -24,11 +26,17 @@ class ConfigParser
     /**
      * @param string ...$files
      * @return void
+     * @throws ParseException|FileNotFoundException
      */
     public function loadFiles(string ...$files): void
     {
         foreach ($files as $file){
             $extension = pathinfo($file)['extension'];
+
+            if (!file_exists($file)){
+                throw new FileNotFoundException('File not found: ' . $file);
+            }
+
             $fileContents = file_get_contents($file);
 
             $content = null;
@@ -41,7 +49,7 @@ class ConfigParser
             }
 
             if ($content === null){
-                continue;
+                throw new ParseException('File content empty or file content is invalid');
             }
 
             $this->fileData[] = [

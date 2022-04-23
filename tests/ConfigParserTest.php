@@ -5,6 +5,8 @@ namespace App\Tests;
 
 use App\Services\ConfigParser;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
+use Symfony\Component\Yaml\Exception\ParseException;
 
 class ConfigParserTest extends TestCase
 {
@@ -92,4 +94,41 @@ class ConfigParserTest extends TestCase
 
         $this->assertTrue(json_encode($expectedOutput) === json_encode($configParser->getMergedContent()));
     }
+
+    /**
+     * @throws ParseException
+     */
+    public function testInvalidYaml()
+    {
+        $this->expectException(ParseException::class);
+        $configParser = new ConfigParser();
+        $configParser->loadFiles(
+            __DIR__.'/testFixtures/testFileInvalid.yaml'
+        );
+    }
+
+    /**
+     * @throws ParseException
+     */
+    public function testInvalidJson()
+    {
+        $this->expectException(ParseException::class);
+        $configParser = new ConfigParser();
+        $configParser->loadFiles(
+            __DIR__.'/testFixtures/testFileInvalid.json'
+        );
+    }
+
+    /**
+     * @throws FileNotFoundException
+     */
+    public function testFileNotFound()
+    {
+        $this->expectException(FileNotFoundException::class);
+        $configParser = new ConfigParser();
+        $configParser->loadFiles(
+            __DIR__.'/testFixtures/testFileInvalid123.json'
+        );
+    }
+
 }
