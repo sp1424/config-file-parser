@@ -1,0 +1,11 @@
+#Docker compose is used for multiple containers but since Docker's
+#'COPY' command was failing to copy the contents correctly it is cleaner and easier to do via docker-compose method
+version: '3.3'
+services:
+  php:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: php
+    ports:
+      - "8080:80"
