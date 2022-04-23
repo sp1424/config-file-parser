@@ -21,8 +21,8 @@ class ConfigParserTest extends TestCase
 
         $configParser = new ConfigParser();
         $configParser->loadFiles(
-            __DIR__.'/testFixtures/testFile1.config.json',
-            __DIR__.'/testFixtures/testFile2.config.json'
+            __DIR__ . '/fixtures/testFile1.config.json',
+            __DIR__ . '/fixtures/testFile2.config.json'
         );
         $configParser->mergeData();
 
@@ -33,8 +33,8 @@ class ConfigParserTest extends TestCase
     {
         $configParser = new ConfigParser();
         $configParser->loadFiles(
-            __DIR__.'/testFixtures/testFile1.config.json',
-            __DIR__.'/testFixtures/testFile2.config.json'
+            __DIR__ . '/fixtures/testFile1.config.json',
+            __DIR__ . '/fixtures/testFile2.config.json'
         );
         $configParser->mergeData();
 
@@ -47,8 +47,8 @@ class ConfigParserTest extends TestCase
     {
         $configParser = new ConfigParser();
         $configParser->loadFiles(
-            __DIR__.'/testFixtures/testFile1.config.json',
-            __DIR__.'/testFixtures/testFile2.config.json'
+            __DIR__ . '/fixtures/config.local.json',
+            __DIR__ . '/fixtures/config.json'
         );
         $configParser->mergeData();
 
@@ -68,8 +68,8 @@ class ConfigParserTest extends TestCase
 
         $configParser = new ConfigParser();
         $configParser->loadFiles(
-            __DIR__.'/testFixtures/testFile1.config.yaml',
-            __DIR__.'/testFixtures/testFile2.config.yaml'
+            __DIR__.'/fixtures/testFile1.config.yaml',
+            __DIR__.'/fixtures/testFile2.config.yaml'
         );
         $configParser->mergeData();
 
@@ -87,8 +87,8 @@ class ConfigParserTest extends TestCase
 
         $configParser = new ConfigParser();
         $configParser->loadFiles(
-            __DIR__.'/testFixtures/testFile2.config.yaml',
-            __DIR__.'/testFixtures/testFile1.config.json'
+            __DIR__.'/fixtures/testFile2.config.yaml',
+            __DIR__.'/fixtures/testFile1.config.json'
         );
         $configParser->mergeData();
 
@@ -103,7 +103,7 @@ class ConfigParserTest extends TestCase
         $this->expectException(ParseException::class);
         $configParser = new ConfigParser();
         $configParser->loadFiles(
-            __DIR__.'/testFixtures/testFileInvalid.yaml'
+            __DIR__ . '/fixtures/testFileInvalid.yaml'
         );
     }
 
@@ -115,7 +115,7 @@ class ConfigParserTest extends TestCase
         $this->expectException(ParseException::class);
         $configParser = new ConfigParser();
         $configParser->loadFiles(
-            __DIR__.'/testFixtures/testFileInvalid.json'
+            __DIR__ . '/fixtures/testFileInvalid.json'
         );
     }
 
@@ -127,7 +127,7 @@ class ConfigParserTest extends TestCase
         $this->expectException(FileNotFoundException::class);
         $configParser = new ConfigParser();
         $configParser->loadFiles(
-            __DIR__.'/testFixtures/testFileInvalid123.json'
+            __DIR__ . '/fixtures/testFileInvalid123.json'
         );
     }
 
@@ -139,8 +139,8 @@ class ConfigParserTest extends TestCase
         $expectedOutput = 'test';
         $configParser = new ConfigParser();
         $configParser->loadFiles(
-            __DIR__.'/testFixtures/deeplyNestedConfig1.json',
-            __DIR__.'/testFixtures/deeplyNestedConfig2.json'
+            __DIR__ . '/fixtures/deeplyNestedConfig1.json',
+            __DIR__ . '/fixtures/deeplyNestedConfig2.json'
         );
         $configParser->mergeData();
         $traversedData = $configParser->traverseContent('database.data.json.config');
@@ -164,8 +164,8 @@ class ConfigParserTest extends TestCase
 
         $configParser = new ConfigParser();
         $configParser->loadFiles(
-            __DIR__.'/testFixtures/deeplyNestedConfig1.json',
-            __DIR__.'/testFixtures/deeplyNestedConfig2.json'
+            __DIR__ . '/fixtures/deeplyNestedConfig1.json',
+            __DIR__ . '/fixtures/deeplyNestedConfig2.json'
         );
         $configParser->mergeData();
         $traversedData = $configParser->traverseContent('database.data');
@@ -180,9 +180,9 @@ class ConfigParserTest extends TestCase
         $expectedOutput = 'yaml host';
         $configParser = new ConfigParser();
         $configParser->loadFiles(
-            __DIR__.'/testFixtures/deeplyNestedConfig1.json',
-            __DIR__.'/testFixtures/deeplyNestedConfig2.json',
-            __DIR__.'/testFixtures/testFile2.config.yaml',
+            __DIR__ . '/fixtures/deeplyNestedConfig1.json',
+            __DIR__ . '/fixtures/deeplyNestedConfig2.json',
+            __DIR__ . '/fixtures/testFile2.config.yaml',
         );
         $configParser->mergeData();
         $traversedData = $configParser->traverseContent('database.host');
