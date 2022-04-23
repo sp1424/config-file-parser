@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Exception\ParseFileException;
+use Symfony\Component\Yaml\Exception\ParseException;
 use Symfony\Component\Yaml\Yaml;
 
 class ConfigParser
@@ -24,6 +26,7 @@ class ConfigParser
     /**
      * @param string ...$files
      * @return void
+     * @throws ParseFileException|ParseException
      */
     public function loadFiles(string ...$files): void
     {
@@ -41,7 +44,7 @@ class ConfigParser
             }
 
             if ($content === null){
-                continue;
+                throw new ParseException('File content empty or file content is invalid');
             }
 
             $this->fileData[] = [
