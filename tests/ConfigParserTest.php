@@ -95,28 +95,26 @@ class ConfigParserTest extends TestCase
         $this->assertTrue(json_encode($expectedOutput) === json_encode($configParser->getMergedContent()));
     }
 
-    /**
-     * @throws ParseException
-     */
+
     public function testInvalidYaml(): void
     {
-        $this->expectException(ParseException::class);
         $configParser = new ConfigParser();
         $configParser->loadFiles(
             __DIR__ . '/fixtures/testFileInvalid.yaml'
         );
+
+        $this->assertEmpty($configParser->getMergedContent());
     }
 
-    /**
-     * @throws ParseException
-     */
+
     public function testInvalidJson(): void
     {
-        $this->expectException(ParseException::class);
         $configParser = new ConfigParser();
         $configParser->loadFiles(
             __DIR__ . '/fixtures/testFileInvalid.json'
         );
+
+        $this->assertEmpty($configParser->getMergedContent());
     }
 
     /**
@@ -131,9 +129,6 @@ class ConfigParserTest extends TestCase
         );
     }
 
-    /**
-     * @throws FileNotFoundException
-     */
     public function testDeepNestedFilesString(): void
     {
         $expectedOutput = 'test';
