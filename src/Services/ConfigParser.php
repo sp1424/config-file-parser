@@ -31,11 +31,11 @@ class ConfigParser
     public function loadFiles(string ...$files): void
     {
         foreach ($files as $file){
-            $extension = pathinfo($file)['extension'];
-
             if (!file_exists($file)){
                 throw new FileNotFoundException('File not found: ' . $file);
             }
+
+            $extension = pathinfo($file)['extension'];
 
             $fileContents = file_get_contents($file);
 
