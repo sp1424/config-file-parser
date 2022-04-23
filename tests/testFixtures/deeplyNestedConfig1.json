@@ -1,0 +1,15 @@
+{
+  "environment": "prod",
+  "database": {
+    "host": "mysql",
+    "data": {
+      "deeply": "nexted",
+      "json": {
+        "config": "test",
+        "test": {
+          "final": "next"
+        }
+      }
+    }
+  }
+}

@@ -62,7 +62,7 @@ class ConfigParserTest extends TestCase
         $expectedOutput = [
             'environment' => 'development',
             'database' => [
-                'host' => '127.0.0.1'
+                'host' => 'yaml host'
             ]
         ];
 
@@ -131,4 +131,61 @@ class ConfigParserTest extends TestCase
         );
     }
 
+    /**
+     * @throws FileNotFoundException
+     */
+    public function testDeepNestedFilesString()
+    {
+        $expectedOutput = 'test';
+        $configParser = new ConfigParser();
+        $configParser->loadFiles(
+            __DIR__.'/testFixtures/deeplyNestedConfig1.json',
+            __DIR__.'/testFixtures/deeplyNestedConfig2.json'
+        );
+        $configParser->mergeData();
+        $traversedData = $configParser->traverseContent('database.data.json.config');
+        $this->assertTrue($expectedOutput ===  $traversedData);
+    }
+
+    /**
+     * @throws FileNotFoundException
+     */
+    public function testDeepNestedFilesArray()
+    {
+        $expectedOutput = [
+            'deeply' => 'test',
+            'json' => [
+                'config' => 'test',
+                'test' => [
+                    'final' => 'final'
+                ]
+            ]
+        ];
+
+        $configParser = new ConfigParser();
+        $configParser->loadFiles(
+            __DIR__.'/testFixtures/deeplyNestedConfig1.json',
+            __DIR__.'/testFixtures/deeplyNestedConfig2.json'
+        );
+        $configParser->mergeData();
+        $traversedData = $configParser->traverseContent('database.data');
+        $this->assertTrue(json_encode($expectedOutput) ===  $traversedData);
+    }
+
+    /**
+     * @throws FileNotFoundException
+     */
+    public function testMultipleFiles()
+    {
+        $expectedOutput = 'yaml host';
+        $configParser = new ConfigParser();
+        $configParser->loadFiles(
+            __DIR__.'/testFixtures/deeplyNestedConfig1.json',
+            __DIR__.'/testFixtures/deeplyNestedConfig2.json',
+            __DIR__.'/testFixtures/testFile2.config.yaml',
+        );
+        $configParser->mergeData();
+        $traversedData = $configParser->traverseContent('database.host');
+        $this->assertTrue($expectedOutput ===  $traversedData);
+    }
 }
